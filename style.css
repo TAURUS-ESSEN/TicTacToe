@@ -1,0 +1,26 @@
+ * {
+    margin: 0;
+ }
+
+ .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+ }
+ 
+ .string {
+    display: flex;
+    gap: 5px;
+    padding: 2px;
+ }
+
+ .gameButton {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+ }
+
+ .gameButton:hover {
+    background-color: bisque;
+ }
