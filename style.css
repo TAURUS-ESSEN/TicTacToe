@@ -2,6 +2,18 @@
     margin: 0;
  }
 
+ @import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&family=Fredericka+the+Great&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
+
+body, button {
+    font-family: "Fredericka the Great",'Courier New', Courier, monospace;
+}
+
+.fredericka-the-great-regular {
+    font-family: "Fredericka the Great", serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
  .wrapper {
     display: flex;
     flex-direction: column;
@@ -19,8 +31,12 @@
     width: 100px;
     height: 100px;
     border-radius: 5px;
+    font-size: 2rem;
+    color: red;
  }
 
  .gameButton:hover {
     background-color: bisque;
  }
+
+ 

@@ -1,8 +1,9 @@
 'use strict';
 const Gameboard = {
     gameboard:  Array(9).fill(""),
+    gameboard1:  Array(9).fill(""),
     moveCounter: 0,
-    currentPlayer: "x",
+    //currentPlayer: "x",
 }
 
 function createPlayer(name,marker) {
@@ -14,7 +15,6 @@ function createPlayer(name,marker) {
 
 const gameControl = (function () {
     let moveCounter = 0;
-
     return {
         counterIncrement: function() {
             moveCounter++;
@@ -26,7 +26,30 @@ const gameControl = (function () {
         },
         counterShow: function() {
             return moveCounter;
-        }
+        },
+        
+    };
+})();
+
+const gameControl1 = (function () {
+    let moveCounter1 = 0;
+    let currentPlayer1 = "x";
+    return {
+        counterIncrement1: function() {
+            moveCounter1++;
+           console.log("moveCounter1=",moveCounter1);
+        },
+        counterDecrement1: function() {
+            moveCounter1--;
+            console.log("moveCounter1=",moveCounter1);
+        },
+        counterShow1: function() {
+            return moveCounter1;
+        },
+        currentPlayerChange1: function() {
+            currentPlayer1 = (moveCounter1 % 2==0) ? "X" : "O";
+            return currentPlayer1; 
+        },
     };
 })();
   
@@ -35,9 +58,85 @@ const player2 = createPlayer("Ira", "o");
 
 let gameboard = Gameboard.gameboard; 
 let moveCounter = gameControl.counterShow();
+let moveCounter1 = gameControl1.counterShow1();
 let marker =  Gameboard.currentPlayer;
 
-round(gameboard, moveCounter);
+
+function test(currentButton) {   
+    currentButton.textContent=gameControl1.currentPlayerChange1(); 
+    if (gameControl1.currentPlayerChange1() == "X") {
+      
+        currentButton.style.color = "blue";
+    }
+    console.log("Доска до нажатия ", Gameboard.gameboard1);
+    console.log("счетчик до =", gameControl1.counterShow1());
+    Gameboard.gameboard1[currentButton.value] = gameControl1.currentPlayerChange1();
+    console.log("доска после нажатия = ", Gameboard.gameboard1);
+    gameControl1.counterIncrement1();
+    console.log("счетчик ПОСЛЕ =", gameControl1.counterShow1());
+    let result1 =checkResult1(Gameboard.gameboard1, gameControl1.counterShow1());
+            if (result1 == "win") {
+                winMessage(gameControl1.counterShow1(), gameControl1.currentPlayerChange1());
+                  
+            }
+            
+            if (result1 == "draw") {
+                drawMessage();
+                  
+            }
+}
+
+function checkResult1(gameboard, moveCounter) {
+    console.log("--------------------------");
+    console.log("проверка хода #" +moveCounter);
+
+// check lines    
+for (let i = 0; i < 9; i += 3) {
+    let threeInRow = gameboard.slice(i, i + 3);
+    console.log(`проверяем по строкам`);
+    console.log(threeInRow);
+    if (threeInRow.every(el => el !== "")) {
+        if (new Set(threeInRow).size === 1) {
+            return "win";
+        }
+    }
+}
+
+// check columns
+for (let i = 0; i < 3; i += 1) {
+    let threeInColumn = [gameboard[i],gameboard[i+3],gameboard[i+6]];
+    console.log(`проверяем по столбцам`);
+    console.log(threeInColumn);
+    if (threeInColumn.every(el => el !== "")) {
+    if (new Set(threeInColumn).size === 1 ) {
+       return "win";
+    }
+  }
+}  
+// check diagonals
+  let leftToRightDiagonal= [gameboard[0],gameboard[4],gameboard[8]];
+  if (leftToRightDiagonal.every(el => el !== "")) {
+  if (new Set(leftToRightDiagonal).size === 1) {
+        return "win";
+    }
+ }
+
+let rightToLeftDiagonal= [gameboard[2],gameboard[4],gameboard[6]];
+if (rightToLeftDiagonal.every(el => el !== "")) {
+if (new Set(rightToLeftDiagonal).size === 1) {
+        return "win";
+}
+}
+
+// check draw
+if (!gameboard.includes("")) {
+    console.log("теперь доска"+gameboard);
+    return `draw`;
+}
+} 
+
+
+//round(gameboard, moveCounter);
 
 function round(gameboard, moveCounter) {
     for (let i = 0; i < 9; i++) { 
@@ -76,14 +175,14 @@ function round(gameboard, moveCounter) {
 }
 
 function checkResult(gameboard, moveCounter) {
-    console.log("--------------------------");
-    console.log("проверка хода #" +moveCounter);
+  //  console.log("--------------------------");
+  //  console.log("проверка хода #" +moveCounter);
 
 // check lines    
 for (let i = 0; i < 9; i += 3) {
     let threeInRow = gameboard.slice(i, i + 3);
-    console.log(`проверяем по строкам`);
-    console.log(threeInRow);
+ //   console.log(`проверяем по строкам`);
+ //   console.log(threeInRow);
     if (threeInRow.every(el => el !== "")) {
         if (new Set(threeInRow).size === 1) {
             return "win";
@@ -117,7 +216,7 @@ if (new Set(rightToLeftDiagonal).size === 1) {
 
 // check draw
 if (!gameboard.includes("")) {
-    console.log("теперь доска"+gameboard);
+   // console.log("теперь доска"+gameboard);
     return `draw`;
 }
 } 
@@ -131,12 +230,6 @@ function drawMessage() {
     console.log("Ничья");
 }
 
-function test(currentButton) {
-   // alert("Rabotaet");
-  // console.log(btn0);
-    currentButton.textContent="X";
-    console.log(currentButton.id);
-}
 
 const btn0 = document.getElementById("button0");
 btn0.addEventListener("click", function() {
@@ -146,22 +239,22 @@ btn1.addEventListener("click", function() {
     test(btn1) })
 const btn2 = document.getElementById("button2")
 btn2.addEventListener("click", function() {
-    test() })
+    test(btn2) })
 const btn3 = document.getElementById("button3");
 btn3.addEventListener("click", function() {
-    test() })
+    test(btn3) })
 const btn4 = document.getElementById("button4");
 btn4.addEventListener("click", function() {
-    test() })
+    test(btn4) })
 const btn5 = document.getElementById("button5");
 btn5.addEventListener("click", function() {
-    test() })
+    test(btn5) })
 const btn6 = document.getElementById("button6");
 btn6.addEventListener("click", function() {
-    test() })
+    test(btn6) })
 const btn7 = document.getElementById("button7");
 btn7.addEventListener("click", function() {
-    test() })
+    test(btn7) })
 const btn8 = document.getElementById("button8");
 btn8.addEventListener("click", function() {
-    test() })
+    test(btn8) })
