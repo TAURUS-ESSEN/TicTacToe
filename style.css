@@ -8,6 +8,20 @@ body, button {
     font-family: "Fredericka the Great",'Courier New', Courier, monospace;
 }
 
+input {
+   height: 1.5rem;
+   border: 1px solid gainsboro;
+   font-family: "Fredericka the Great",'Courier New', Courier, monospace;
+   font-size: 1.4rem;
+   padding: 5px;
+   width: 150px;
+}
+
+input:disabled {
+   background-color: white;
+   border: 0px;
+ }
+
 .fredericka-the-great-regular {
     font-family: "Fredericka the Great", serif;
     font-weight: 400;
@@ -20,7 +34,25 @@ body, button {
     align-items: center;
     gap: 20px;
  }
- 
+
+.header {
+   text-align: center;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 5px;
+}
+.headerText {
+   font-size: 1.4rem;
+}
+
+.blue {
+   color: blue;
+}
+.red {
+   color: red;
+}
+
  .string {
     display: flex;
     gap: 5px;
@@ -28,10 +60,10 @@ body, button {
  }
 
  .gameButton {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     border-radius: 5px;
-    font-size: 3rem;
+    font-size: 4rem;
     color: red;
     background-color: #e7e6e6;
  }

@@ -42,8 +42,8 @@ const gameControl = (function () {
     };
 })();
   
-const player1 = createPlayer("Vasya", "X");
-const player2 = createPlayer("Ira", "O");
+const player1 = createPlayer("player1", "X");
+const player2 = createPlayer("player2", "O");
 
 //сокращения
 
@@ -54,6 +54,8 @@ let moveCounter = gameControl.counterShow;
 
 function makeTurn(currentButton) {
     if (gameboard[currentButton.value] === "") {
+        document.querySelectorAll("input").forEach(function(input) {
+            input.disabled = true; });
         currentButton.textContent = gameControl.currentPlayerChange(); 
         if (gameControl.currentPlayerChange() == "X") {
             currentButton.style.color = "blue";
@@ -147,21 +149,22 @@ function reset() {
         button.textContent = "";
         gameControl.gameReset();
       });
+      document.querySelectorAll("input").forEach(function(input) {
+        input.disabled = false; });
      
 
 }
 
 function winMessage(moveCounter, marker) {
-    marker == player1.marker ? console.log("победил " +player1.name) :  console.log("победил " +player2.name);
+    //marker == player1.marker ? console.log("победил " +player1.name) :  console.log("победил " +player2.name);
     let winner = marker == player1.marker ? player1.name : player2.name
     //console.log("тут будет текст про победу. Игра закончена на #"+moveCounter + " Победа за " +marker);
-    document.getElementById("footer").innerHTML = `<div id="endGame"><p>Player ${winner} wins</p></div>`;
+    document.getElementById("footer").innerHTML = `<div id="endGame"><p>Player ${winner}  ${marker}  wins</p></div>`;
     document.querySelectorAll(".gameButton").forEach(function(button) {
         button.disabled = true;
       });
      
     createNewButton()
- 
 }
 
 function drawMessage() {
@@ -198,3 +201,15 @@ btn7.addEventListener("click", function() {
 const btn8 = document.getElementById("button8");
 btn8.addEventListener("click", function() {
     makeTurn(btn8) })
+
+const inputPlayer1Name = document.getElementById("player1Name");
+    inputPlayer1Name.addEventListener("change", function(){
+        player1.name = inputPlayer1Name.value;
+        console.log(player1.name);
+    })
+
+    const inputPlayer2Name = document.getElementById("player2Name");
+    inputPlayer2Name.addEventListener("change", function(){
+        player2.name = inputPlayer2Name.value;
+        console.log(player2.name);
+    })
