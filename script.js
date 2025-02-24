@@ -1,9 +1,14 @@
 'use strict';
 const Gameboard = {
     gameboard:  Array(9).fill(""),
-    gameboard1:  Array(9).fill(""),
-    moveCounter: 0,
-    //currentPlayer: "x",
+   // moveCounter: 0,
+    //currentPlayer: "X",
+    gameboardReset: function() {
+        gameboard = Array(9).fill("")
+    },
+
+    
+
 }
 
 function createPlayer(name,marker) {
@@ -15,75 +20,64 @@ function createPlayer(name,marker) {
 
 const gameControl = (function () {
     let moveCounter = 0;
+    let currentPlayer = "X";
     return {
         counterIncrement: function() {
             moveCounter++;
-            console.log("moveCounter"+moveCounter);
         },
-        counterDecrement: function() {
+        counterDecrement1: function() {
             moveCounter--;
-            console.log("moveCounter"+moveCounter);
         },
         counterShow: function() {
             return moveCounter;
         },
-        
-    };
-})();
-
-const gameControl1 = (function () {
-    let moveCounter1 = 0;
-    let currentPlayer1 = "x";
-    return {
-        counterIncrement1: function() {
-            moveCounter1++;
-           console.log("moveCounter1=",moveCounter1);
+        currentPlayerChange: function() {
+            currentPlayer = (moveCounter % 2==0) ? "X" : "O";
+            return currentPlayer; 
         },
-        counterDecrement1: function() {
-            moveCounter1--;
-            console.log("moveCounter1=",moveCounter1);
-        },
-        counterShow1: function() {
-            return moveCounter1;
-        },
-        currentPlayerChange1: function() {
-            currentPlayer1 = (moveCounter1 % 2==0) ? "X" : "O";
-            return currentPlayer1; 
+        gameReset: function() {
+            moveCounter = 0;
+            currentPlayer = "X";
         },
     };
 })();
   
-const player1 = createPlayer("Vasya", "x");
-const player2 = createPlayer("Ira", "o");
+const player1 = createPlayer("Vasya", "X");
+const player2 = createPlayer("Ira", "O");
+
+//сокращения
 
 let gameboard = Gameboard.gameboard; 
-let moveCounter = gameControl.counterShow();
-let moveCounter1 = gameControl1.counterShow1();
-let marker =  Gameboard.currentPlayer;
+let moveCounter = gameControl.counterShow;
+//let marker =  Gameboard.currentPlayer;
+ 
 
-
-function test(currentButton) {   
-    currentButton.textContent=gameControl1.currentPlayerChange1(); 
-    if (gameControl1.currentPlayerChange1() == "X") {
-      
-        currentButton.style.color = "blue";
-    }
-    console.log("Доска до нажатия ", Gameboard.gameboard1);
-    console.log("счетчик до =", gameControl1.counterShow1());
-    Gameboard.gameboard1[currentButton.value] = gameControl1.currentPlayerChange1();
-    console.log("доска после нажатия = ", Gameboard.gameboard1);
-    gameControl1.counterIncrement1();
-    console.log("счетчик ПОСЛЕ =", gameControl1.counterShow1());
-    let result1 =checkResult1(Gameboard.gameboard1, gameControl1.counterShow1());
+function makeTurn(currentButton) {
+    if (gameboard[currentButton.value] === "") {
+        currentButton.textContent = gameControl.currentPlayerChange(); 
+        if (gameControl.currentPlayerChange() == "X") {
+            currentButton.style.color = "blue";
+        }
+        if (gameControl.currentPlayerChange() == "O") {
+            currentButton.style.color = "red";
+        }
+      //  console.log("Доска до нажатия ", gameboard);
+        console.log("счетчик до =", moveCounter());
+        gameboard[currentButton.value] = gameControl.currentPlayerChange();
+        console.log("доска после нажатия = ", gameboard);
+       
+        
+        currentButton.disabled = "true"
+        let result1 =checkResult1(gameboard, moveCounter());
             if (result1 == "win") {
-                winMessage(gameControl1.counterShow1(), gameControl1.currentPlayerChange1());
-                  
+                 winMessage(moveCounter(), gameControl.currentPlayerChange()); 
             }
-            
             if (result1 == "draw") {
-                drawMessage();
-                  
-            }
+                drawMessage();     
+            } 
+        gameControl.counterIncrement();
+        console.log("счетчик ПОСЛЕ =", moveCounter());
+    }
 }
 
 function checkResult1(gameboard, moveCounter) {
@@ -135,126 +129,72 @@ if (!gameboard.includes("")) {
 }
 } 
 
-
-//round(gameboard, moveCounter);
-
-function round(gameboard, moveCounter) {
-    for (let i = 0; i < 9; i++) { 
-        console.log("--------------------------");
-        console.log("ИИИИ ТЕКУУУЩИЙ СЧЕТЧИК ЗАЦИКЛЕННЫЙ" +gameControl.counterShow());
-        console.log("Ход #" +gameControl.counterShow());
-        marker = (i % 2==0) ? "x" : "o";
-
-        let randomNumber = Math.floor(Math.random() * 9);
-        console.log("случайная позиция в массиве "+randomNumber);
-    
-        if (gameboard[randomNumber] == "") {
-            console.log("позиция свободная, идет запись в массив")
-            gameboard[randomNumber] = marker;  
-            gameControl.counterIncrement();
-            console.log("доска на #"+gameControl.counterShow(), gameboard);
-            let result = (checkResult(gameboard, gameControl.counterShow())); 
-            if (result == "win") {
-                winMessage(gameControl.counterShow(), marker);
-                break;  
-            }
-            
-            if (result == "draw") {
-                drawMessage();
-                break;  
-            }
-        }
-
-        else {
-            console.log("позиция занята, перезапуск итерации")
-            i--;
-          //  moveCounter--;
-           // gameControl.counterDecrement();
-        }
-    }
+function createNewButton() {
+    const resetBtn = document.createElement("button");
+    resetBtn.textContent = "New Game";
+    resetBtn.classList = "resetBtn";
+    document.getElementById("endGame").appendChild(resetBtn);
+    resetBtn.addEventListener("click", function() {
+        reset() })
 }
 
-function checkResult(gameboard, moveCounter) {
-  //  console.log("--------------------------");
-  //  console.log("проверка хода #" +moveCounter);
+function reset() {
+    Gameboard.gameboardReset();
+    console.log("сброс доски = ", gameboard);
+    document.getElementById("endGame").remove();
+    document.querySelectorAll(".gameButton").forEach(function(button) {
+        button.disabled = false;
+        button.textContent = "";
+        gameControl.gameReset();
+      });
+     
 
-// check lines    
-for (let i = 0; i < 9; i += 3) {
-    let threeInRow = gameboard.slice(i, i + 3);
- //   console.log(`проверяем по строкам`);
- //   console.log(threeInRow);
-    if (threeInRow.every(el => el !== "")) {
-        if (new Set(threeInRow).size === 1) {
-            return "win";
-        }
-    }
 }
-
-// check columns
-for (let i = 0; i < 3; i += 1) {
-    let threeInColumn = [gameboard[i],gameboard[i+3],gameboard[i+6]];
-    if (threeInColumn.every(el => el !== "")) {
-    if (new Set(threeInColumn).size === 1 ) {
-       return "win";
-    }
-  }
-}  
-// check diagonals
-  let leftToRightDiagonal= [gameboard[0],gameboard[4],gameboard[8]];
-  if (leftToRightDiagonal.every(el => el !== "")) {
-  if (new Set(leftToRightDiagonal).size === 1) {
-        return "win";
-    }
- }
-
-let rightToLeftDiagonal= [gameboard[2],gameboard[4],gameboard[6]];
-if (rightToLeftDiagonal.every(el => el !== "")) {
-if (new Set(rightToLeftDiagonal).size === 1) {
-        return "win";
-}
-}
-
-// check draw
-if (!gameboard.includes("")) {
-   // console.log("теперь доска"+gameboard);
-    return `draw`;
-}
-} 
 
 function winMessage(moveCounter, marker) {
     marker == player1.marker ? console.log("победил " +player1.name) :  console.log("победил " +player2.name);
-    console.log("тут будет текст про победу. Игра закончена на #"+moveCounter + " Победа за " +marker);
+    let winner = marker == player1.marker ? player1.name : player2.name
+    //console.log("тут будет текст про победу. Игра закончена на #"+moveCounter + " Победа за " +marker);
+    document.getElementById("footer").innerHTML = `<div id="endGame"><p>Player ${winner} wins</p></div>`;
+    document.querySelectorAll(".gameButton").forEach(function(button) {
+        button.disabled = true;
+      });
+     
+    createNewButton()
+ 
 }
 
 function drawMessage() {
     console.log("Ничья");
+    document.getElementById("footer").innerHTML = `<div id="endGame"><p>Draw</p></div>`;
+    createNewButton()
 }
 
 
 const btn0 = document.getElementById("button0");
 btn0.addEventListener("click", function() {
-   test(btn0) })
+   makeTurn(btn0) })
 const btn1 = document.getElementById("button1");
 btn1.addEventListener("click", function() {
-    test(btn1) })
+    makeTurn(btn1) })
 const btn2 = document.getElementById("button2")
 btn2.addEventListener("click", function() {
-    test(btn2) })
+    makeTurn(btn2) })
 const btn3 = document.getElementById("button3");
 btn3.addEventListener("click", function() {
-    test(btn3) })
+    makeTurn(btn3) })
 const btn4 = document.getElementById("button4");
 btn4.addEventListener("click", function() {
-    test(btn4) })
+    makeTurn(btn4) })
 const btn5 = document.getElementById("button5");
 btn5.addEventListener("click", function() {
-    test(btn5) })
+    makeTurn(btn5) })
 const btn6 = document.getElementById("button6");
 btn6.addEventListener("click", function() {
-    test(btn6) })
+    makeTurn(btn6) })
 const btn7 = document.getElementById("button7");
 btn7.addEventListener("click", function() {
-    test(btn7) })
+    makeTurn(btn7) })
 const btn8 = document.getElementById("button8");
 btn8.addEventListener("click", function() {
-    test(btn8) })
+    makeTurn(btn8) })

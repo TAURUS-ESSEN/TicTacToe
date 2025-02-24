@@ -31,12 +31,44 @@ body, button {
     width: 100px;
     height: 100px;
     border-radius: 5px;
-    font-size: 2rem;
+    font-size: 3rem;
     color: red;
+    background-color: #e7e6e6;
  }
 
  .gameButton:hover {
-    background-color: bisque;
+    background-color: rgb(245, 186, 113);
  }
 
- 
+ button:disabled {
+    background-color: #e7e6e6;
+  }
+
+ button:disabled:hover {
+    background-color: #e7e6e6;
+  }
+
+.footer div{
+    font-size: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    gap: 10px;
+}
+
+.resetBtn {
+   width: 150px;
+   height: 50px;
+   font-size: 1rem;
+   transition: .2s linear;
+   background: #1b1b1b;
+   padding: 10px;
+   color: white;
+   border-radius: 10px;
+}
+
+.resetBtn:hover {
+   box-shadow: 0 0 0 2px white, 0 0 0 4px rgb(23, 232, 131);
+   color: rgb(23, 232, 131);
+   }
