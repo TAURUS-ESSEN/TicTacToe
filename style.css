@@ -1,17 +1,13 @@
- * {
-    margin: 0;
+@import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&family=Fredericka+the+Great&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
+
+* {
+   margin: 0;   
+   font-family: "Fredericka the Great",'Courier New', Courier, monospace;
  }
-
- @import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&family=Fredericka+the+Great&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
-
-body, button {
-    font-family: "Fredericka the Great",'Courier New', Courier, monospace;
-}
 
 input {
    height: 1.5rem;
    border: 1px solid gainsboro;
-   font-family: "Fredericka the Great",'Courier New', Courier, monospace;
    font-size: 1.4rem;
    padding: 5px;
    width: 150px;
@@ -22,17 +18,11 @@ input:disabled {
    border: 0px;
  }
 
-.fredericka-the-great-regular {
-    font-family: "Fredericka the Great", serif;
-    font-weight: 400;
-    font-style: normal;
-  }
-
- .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+.wrapper {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 20px;
  }
 
 .header {
@@ -42,6 +32,11 @@ input:disabled {
    align-items: center;
    gap: 5px;
 }
+
+.header  div {
+   height: 50px;
+}
+
 .headerText {
    font-size: 1.4rem;
 }
@@ -49,47 +44,61 @@ input:disabled {
 .blue {
    color: blue;
 }
+
 .red {
    color: red;
 }
 
- .string {
-    display: flex;
-    gap: 5px;
-    padding: 2px;
- }
-
- .gameButton {
-    width: 150px;
-    height: 150px;
-    border-radius: 5px;
-    font-size: 4rem;
-    color: red;
-    background-color: #e7e6e6;
- }
-
- .gameButton:hover {
-    background-color: rgb(245, 186, 113);
- }
-
- button:disabled {
-    background-color: #e7e6e6;
-  }
-
- button:disabled:hover {
-    background-color: #e7e6e6;
-  }
-
-.footer div{
-    font-size: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 5px;
-    gap: 10px;
+.boardRow {
+   display: flex;
+   gap: 5px;
+   padding: 2px;
 }
 
-.resetBtn {
+.robotLabel {
+   font-size: 0.8rem;
+}
+
+input.robot {
+   width: 10px;  
+}
+
+.header__player2 {
+   display: flex;
+   gap: 5px;
+}
+
+.gameButton {
+   width: 150px;
+   height: 150px;
+   border-radius: 5px;
+   font-size: 4rem;
+   color: red;
+   background-color: #e7e6e6;
+}
+
+.gameButton:hover {
+   background-color: rgb(245, 186, 113);
+}
+
+button:disabled {
+   background-color: #e7e6e6;
+}
+
+button:disabled:hover {
+   background-color: #e7e6e6;
+}
+
+.footer div{
+   font-size: 2rem;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding: 5px;
+   gap: 10px;
+}
+
+.newGameBtn {
    width: 150px;
    height: 50px;
    font-size: 1rem;
@@ -100,7 +109,7 @@ input:disabled {
    border-radius: 10px;
 }
 
-.resetBtn:hover {
+.newGameBtn:hover {
    box-shadow: 0 0 0 2px white, 0 0 0 4px rgb(23, 232, 131);
    color: rgb(23, 232, 131);
-   }
+}

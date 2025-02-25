@@ -10,31 +10,41 @@
 <body>
 <div class="wrapper"><h1>Tic Tac Toe</h1>
     <div class="header">
-        
-        <p class="headerText">
-            <span class="blue">X </span><input type="text" id="player1Name"  placeholder="Player1" value=""> </p>
-            <p class="headerText">   <span class="red">O </span><input type="text" id="player2Name"  placeholder="Player2" value=""></p>
-        
+         <div class="header__player1">
+            <p class="headerText">
+                <span class="blue">X </span><input type="text" id="player1Name"  placeholder="Player1" value=""> 
+            </p>
+        </div>
+        <div class="header__player2">
+            <div>
+                <p class="headerText">  
+                     <span class="red">O </span><input type="text" id="player2Name"  placeholder="Player2" value="">
+                </p>
+             </div>
+             <div>
+                <label class="robotLabel" for="robot">Play with Computer</label> <p></p><input type="checkbox" class="robot" id="robot" value="robot">
+            </div>
+        </div>
     </div>
     <div class="gameArea"> 
-        <div class="string">
-            <div class="buttonContainer"><button class="gameButton" id="button0" valUe="0"></button></div>
-            <div class="buttonContainer"><button class="gameButton" id="button1" valUe="1"></button></div>
-            <div class="buttonContainer"><button class="gameButton" id="button2" valUe="2"></button></div>
+        <div class="boardRow">
+            <div class="buttonContainer"><button class="gameButton" id="button0" value="0"></button></div>
+            <div class="buttonContainer"><button class="gameButton" id="button1" value="1"></button></div>
+            <div class="buttonContainer"><button class="gameButton" id="button2" value="2"></button></div>
         </div>
-        <div class="string">
-            <div class="buttonContainer"><button class="gameButton" id="button3" valUe="3"></button></div>
-            <div class="buttonContainer"><button class="gameButton" id="button4" valUe="4"></button></div>
-            <div class="buttonContainer"><button class="gameButton" id="button5" valUe="5"></button></div>
+        <div class="boardRow">
+            <div class="buttonContainer"><button class="gameButton" id="button3" value="3"></button></div>
+            <div class="buttonContainer"><button class="gameButton" id="button4" value="4"></button></div>
+            <div class="buttonContainer"><button class="gameButton" id="button5" value="5"></button></div>
         </div>
-        <div class="string" >
-            <div class="buttonContainer"><button class="gameButton" id="button6" valUe="6"></button></div>
-            <div class="buttonContainer"><button class="gameButton" id="button7" valUe="7"></button></div>
-            <div class="buttonContainer"><button class="gameButton" id="button8" valUe="8"></button></div>
+        <div class="boardRow" >
+            <div class="buttonContainer"><button class="gameButton" id="button6" value="6"></button></div>
+            <div class="buttonContainer"><button class="gameButton" id="button7" value="7"></button></div>
+            <div class="buttonContainer"><button class="gameButton" id="button8" value="8"></button></div>
         </div>
     </div>
      
-    <div class="footer" id="footer">     </div>
+    <div class="footer" id="footer"></div>
 </div>
     
 </body>
