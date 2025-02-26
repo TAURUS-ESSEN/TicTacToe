@@ -32,15 +32,96 @@ const gameControl = (function () {
             moveCounter = 0;
             currentPlayer = "X";
         },
-        updateRobotStatus: function() {
-            isRobot = checkbox.checked;
-            console.log(isRobot);
+        updateRobotStatus: function(checkbox) {
+            isRobot = checkbox;
             return isRobot;
         },
     };
 })();
 
-const displayController = ( function() {
+const displayController = (function() { 
+    // set listeners for all buttons on gameboard
+    const buttons = document.querySelectorAll(".gameButton");
+    buttons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            makeTurn(event.target);   
+        });
+    });
+
+    const inputPlayer1Name = document.getElementById("player1Name");
+    inputPlayer1Name.addEventListener("change", function(){
+        player1.name = inputPlayer1Name.value;
+    });
+
+    const inputPlayer2Name = document.getElementById("player2Name");
+    inputPlayer2Name.addEventListener("change", function(){
+        player2.name = inputPlayer2Name.value;
+    });
+
+    const checkbox = document.getElementById("robot");
+    checkbox.addEventListener("change", function(){
+    gameControl.updateRobotStatus(checkbox.checked);
+});
+
+
+    function deactivateAllInputs() {
+    document.querySelectorAll("input").forEach(function(input) {
+        input.disabled = true; }); // When the game starts, all inputs are deactivated
+    }
+
+    function markerDisplay(currentButton) {
+        currentButton.textContent = currentMarker(); 
+        currentButton.style.color = (moveCounter() %2 == 0) ? "blue" : "red";
+        currentButton.disabled = "true"; 
+    }
+
+    function createNewButton() {
+        const newGameBtn = document.createElement("button");
+        newGameBtn.textContent = "New Game";
+        newGameBtn.classList = "newGameBtn";
+        document.getElementById("endGame").appendChild(newGameBtn);
+        newGameBtn.addEventListener("click", function() {
+            displayController.reset() 
+        })
+    }
+
+    function drawMessage() {
+        document.getElementById("footer").innerHTML = `<div id="endGame"><p>Draw</p></div>`;
+        createNewButton();
+    }
+
+    function winMessage(currentMarker) {
+        let winner = currentMarker == player1.marker ? player1.name : player2.name
+         document.getElementById("footer").innerHTML = `<div id="endGame"><p> ${winner} wins</p></div>`;
+         document.querySelectorAll(".gameButton").forEach(function(button) {
+             button.disabled = true;
+           });
+         createNewButton();
+     }
+
+     
+    function reset() {
+        Gameboard.gameboardReset();
+        console.log("board reset = ", gameboard);
+        document.getElementById("endGame").remove();
+        document.querySelectorAll(".gameButton").forEach(function(button) {
+            button.disabled = false;
+            button.textContent = "";
+            gameControl.gameReset();
+        });
+        document.querySelectorAll("input").forEach(function(input) {
+            input.disabled = false;
+        });     
+    }
+          
+    return {
+        createNewButton,
+        drawMessage,
+        winMessage,
+        reset,
+        deactivateAllInputs,
+        markerDisplay,
+    }
 
 })()
   
@@ -53,34 +134,28 @@ let currentMarker = gameControl.currentPlayerChange;
 
 function makeTurn(currentButton) {
     if (gameboard[currentButton.value] === "") {
-        document.querySelectorAll("input").forEach(function(input) {
-            input.disabled = true; }); // When the game starts, all inputs are deactivated
-
-        currentButton.textContent = currentMarker(); 
-        currentButton.style.color = (moveCounter() %2 == 0) ? "blue" : "red";
-        
+        displayController.deactivateAllInputs();
+        displayController.markerDisplay(currentButton);  
         gameboard[currentButton.value] = currentMarker(); // array[index] = X or O
-        console.log("current gameboard = ", gameboard);
-        currentButton.disabled = "true"; 
-        
+     
         let result = checkResult(gameboard); // check win oder draw
             if (result == "win") {
-                 winMessage(currentMarker()); 
+                 displayController.winMessage(currentMarker()); 
             }
             if (result == "draw") {
-                drawMessage();     
+                displayController.drawMessage();     
             } 
 
         gameControl.counterIncrement(); //  counter +1
       
-        if (gameControl.updateRobotStatus() == true) { // play with robot?
+        if (gameControl.updateRobotStatus(document.getElementById("robot").checked) == true) { // play with robot?
             if (result == "win") {
-                winMessage(currentMarker); 
+                displayController.winMessage(currentMarker); 
                 return;
             }
 
             if (!gameboard.includes("")) {
-                drawMessage();
+                displayController.drawMessage();
                 return;
             }
             setTimeout(() => {
@@ -101,17 +176,14 @@ function robotTurn() {
     gameboard[randomIndex] = currentMarker;     //array[random index] = O
 
     let currentButton1 = document.querySelector(`button[value="${randomIndex}"]`); // select buttom with value = randomIndex
-    currentButton1.disabled = "true"; // deactivate the button to prevent repeated clicks.
-    currentButton1.style.color = (moveCounter() %2 == 0) ? "blue" : "red";
-    currentButton1.textContent = currentMarker; 
-    console.log("gameboard #", +moveCounter, gameboard);  
+    displayController.markerDisplay(currentButton1);
     gameControl.counterIncrement();// counter +1
     let result =checkResult(gameboard); // // check win oder draw
     if (result == "win") {
-         winMessage(moveCounter(), currentMarker); 
+         displayController.winMessage(moveCounter(), currentMarker); 
     }
     if (result == "draw") {
-         drawMessage();     
+         displayController.drawMessage();     
     } 
 }
 
@@ -156,63 +228,4 @@ function checkResult(gameboard) {
         return `draw`;
     }
 } 
-
-function createNewButton() {
-    const newGameBtn = document.createElement("button");
-    newGameBtn.textContent = "New Game";
-    newGameBtn.classList = "newGameBtn";
-    document.getElementById("endGame").appendChild(newGameBtn);
-    newGameBtn.addEventListener("click", function() {
-        reset() 
-    })
-}
-
-function reset() {
-    Gameboard.gameboardReset();
-    console.log("board reset = ", gameboard);
-    document.getElementById("endGame").remove();
-    document.querySelectorAll(".gameButton").forEach(function(button) {
-        button.disabled = false;
-        button.textContent = "";
-        gameControl.gameReset();
-    });
-    document.querySelectorAll("input").forEach(function(input) {
-        input.disabled = false;
-    });     
-}
-
-function winMessage(currentMarker) {
-   let winner = currentMarker == player1.marker ? player1.name : player2.name
-    document.getElementById("footer").innerHTML = `<div id="endGame"><p> ${winner} wins</p></div>`;
-    document.querySelectorAll(".gameButton").forEach(function(button) {
-        button.disabled = true;
-      });
-    createNewButton();
-}
-
-function drawMessage() {
-    document.getElementById("footer").innerHTML = `<div id="endGame"><p>Draw</p></div>`;
-    createNewButton();
-}
-
-const buttons = document.querySelectorAll(".gameButton");
-buttons.forEach(button => {
-    button.addEventListener('click', (event) => {
-        makeTurn(event.target);   
-    });
-});
-
-const inputPlayer1Name = document.getElementById("player1Name");
-    inputPlayer1Name.addEventListener("change", function(){
-        player1.name = inputPlayer1Name.value;
-    });
-
-const inputPlayer2Name = document.getElementById("player2Name");
-    inputPlayer2Name.addEventListener("change", function(){
-        player2.name = inputPlayer2Name.value;
-    });
-
-const checkbox = document.getElementById("robot");
-checkbox.addEventListener("change", function(){
-        gameControl.updateRobotStatus();
-});
+ 
