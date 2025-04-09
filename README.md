@@ -74,7 +74,7 @@ This architecture ensures **clear separation of concerns** and **high maintainab
 
 ## Live Demo
 
-You can play the game **[here](https://TAURUS-ESSEN/.github.io/tic-tac-toe)**.
+You can play the game **[here](https://TAURUS-ESSEN/.github.io/TicTacToe/)**.
 
 ---
 
